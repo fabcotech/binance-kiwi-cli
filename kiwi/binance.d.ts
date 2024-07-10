@@ -1,0 +1,11 @@
+export declare const signatureBinanceApi: (qs: string) => string;
+export declare const getOpenOrders: () => Promise<unknown>;
+export declare const placeSellTradeMarket: (pair: string, balance: number) => Promise<unknown>;
+export declare const getSymbolInfo: (symbol: string) => Promise<unknown>;
+export declare const getPriceTicker: (symbol: string) => Promise<{
+    price: string;
+    symbol: string;
+}>;
+export declare const swapAllToUsd: (pairs: string[], usdSymbol: string) => Promise<string>;
+export declare const cancelOpenOrdersAndSwapToUsd: (pairs: string[], usdSymbol: string) => Promise<boolean>;
+//# sourceMappingURL=binance.d.ts.map

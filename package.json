@@ -1,0 +1,40 @@
+{
+  "name": "binance-kiwi-cli",
+  "version": "0.0.1",
+  "description": "A fun CLI wrapper around Binance trading API. Makes some operations easy to execute and/or automate.",
+  "author": "FABCO",
+  "repository": "",
+  "main": "./kiwi/index.js",
+  "scripts": {
+    "prettier:format": "prettier --write \"{src,tests,wrappers}/**/*.ts\"",
+    "prettier:check": "prettier --check \"{src,tests,wrappers}/**/*.ts\"",
+    "lint": "eslint \"{src,tests,wrappers}/**/*.ts\" --fix",
+    "build": "rm -rf kiwi/ && tsc -b ./tsconfig.build.json"
+  },
+  "files": [
+    "kiwi/"
+  ],
+  "bin": {},
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "undici": "^6.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.1.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.1",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
+  }
+}
