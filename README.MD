@@ -1,5 +1,7 @@
 ## Binance Kiwi CLI
 
+![state of the workflow](https://github.com/fabcotech/binance-kiwi-cli/actions/workflows/main.yml/badge.svg)
+
 ![Kiwi](https://raw.githubusercontent.com/fabcotech/binance-kiwi-cli/main/assets/kiwi.png)
 
 A fun CLI that makes (some) regular binance API operations very easy to execute. For example `--cancel-open-orders`, `--swap-all-to-usd`, and `--buy ETH --amount 10`. `USDC` is the base USD currency.
