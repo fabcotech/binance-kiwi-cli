@@ -4,7 +4,9 @@ import { getProcessArgv, getSingleProcessArgv } from './utils';
 const masterUSD = 'USDC';
 const f = () => {
   if (getSingleProcessArgv('--balances') || getSingleProcessArgv('-b')) {
-    const argv = getSingleProcessArgv('--balances') ? getProcessArgv('--balances') : getProcessArgv('-b');
+    const argv = getSingleProcessArgv('--balances')
+      ? getProcessArgv('--balances')
+      : getProcessArgv('-b');
     printBalances(
       (argv || '')
         .split(',')

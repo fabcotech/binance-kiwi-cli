@@ -14,15 +14,21 @@ const getBalanceBinance = async (symbol: string) => {
     omitZeroBalances: true,
   });
   const signature = signatureBinanceApi(qs);
-  const accountReq = await request(`https://api1.binance.com/api/v3/account?${qs}&signature=${signature}`, {
-    method: 'GET',
-    headers: {
-      'X-MBX-APIKEY': getApiKey(),
-    },
-  });
+  const accountReq = await request(
+    `https://api1.binance.com/api/v3/account?${qs}&signature=${signature}`,
+    {
+      method: 'GET',
+      headers: {
+        'X-MBX-APIKEY': getApiKey(),
+      },
+    }
+  );
   const json: any = await accountReq.body.json();
   try {
-    if (symbol) return parseFloat(json.balances.find((b: any) => b.asset === symbol).free);
+    if (symbol)
+      return parseFloat(
+        json.balances.find((b: any) => b.asset === symbol).free
+      );
     return json.balances;
   } catch (err) {
     return 0;
@@ -34,17 +40,22 @@ export const getOpenOrders = async () => {
     timestamp: new Date().getTime(),
   });
   const signature = signatureBinanceApi(qs);
-  const tradesReq = await request(`https://api1.binance.com/api/v3/openOrders?${qs}&signature=${signature}`, {
-    method: 'GET',
-    headers: {
-      'X-MBX-APIKEY': getApiKey(),
-    },
-  });
+  const tradesReq = await request(
+    `https://api1.binance.com/api/v3/openOrders?${qs}&signature=${signature}`,
+    {
+      method: 'GET',
+      headers: {
+        'X-MBX-APIKEY': getApiKey(),
+      },
+    }
+  );
   return await tradesReq.body.json();
 };
 
 export const placeSellTradeMarket = async (pair: string, balance: number) => {
-  let s = `[placeSellTradeMarket] **${new Date().toISOString().slice(0, 15)}** place sell trade on ${pair}\n`;
+  let s = `[placeSellTradeMarket] **${new Date()
+    .toISOString()
+    .slice(0, 15)}** place sell trade on ${pair}\n`;
   const qs = querystring.stringify({
     symbol: pair,
     side: 'sell',
@@ -54,12 +65,15 @@ export const placeSellTradeMarket = async (pair: string, balance: number) => {
   });
   const signature = signatureBinanceApi(qs);
 
-  const placeOrderReq = await request(`https://api1.binance.com/api/v3/order?${qs}&signature=${signature}`, {
-    method: 'POST',
-    headers: {
-      'X-MBX-APIKEY': getApiKey(),
-    },
-  });
+  const placeOrderReq = await request(
+    `https://api1.binance.com/api/v3/order?${qs}&signature=${signature}`,
+    {
+      method: 'POST',
+      headers: {
+        'X-MBX-APIKEY': getApiKey(),
+      },
+    }
+  );
   if (placeOrderReq.statusCode !== 200) {
     s += `order was not placed ${placeOrderReq.statusCode}:\n`;
     s += `${await placeOrderReq.body.text()}:\n`;
@@ -75,22 +89,30 @@ export const placeSellTradeMarket = async (pair: string, balance: number) => {
 };
 
 export const getSymbolInfo = async (symbol: string) => {
-  const exchangeInfo = await request(`https://api1.binance.com/api/v3/exchangeInfo?symbol=${symbol.toUpperCase()}`, {
-    method: 'GET',
-    headers: {
-      'X-MBX-APIKEY': getApiKey(),
-    },
-  });
+  const exchangeInfo = await request(
+    `https://api1.binance.com/api/v3/exchangeInfo?symbol=${symbol.toUpperCase()}`,
+    {
+      method: 'GET',
+      headers: {
+        'X-MBX-APIKEY': getApiKey(),
+      },
+    }
+  );
   return await exchangeInfo.body.json();
 };
 
-export const getPriceTicker = async (symbol: string): Promise<{ price: string; symbol: string }> => {
-  const resp = await request(`https://api1.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`, {
-    method: 'GET',
-    headers: {
-      'X-MBX-APIKEY': getApiKey(),
-    },
-  });
+export const getPriceTicker = async (
+  symbol: string
+): Promise<{ price: string; symbol: string }> => {
+  const resp = await request(
+    `https://api1.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`,
+    {
+      method: 'GET',
+      headers: {
+        'X-MBX-APIKEY': getApiKey(),
+      },
+    }
+  );
   return (await resp.body.json()) as { price: string; symbol: string };
 };
 
@@ -138,8 +160,13 @@ export const swapAllToUsd = async (pairs: string[], usdSymbol: string) => {
   return '';
 };
 
-export const cancelOpenOrdersAndSwapToUsd = async (pairs: string[], usdSymbol: string) => {
-  let s = `[cancelOpenOrdersAndSwapToUsdt] **${new Date().toISOString().slice(0, 15)}**\n`;
+export const cancelOpenOrdersAndSwapToUsd = async (
+  pairs: string[],
+  usdSymbol: string
+) => {
+  let s = `[cancelOpenOrdersAndSwapToUsdt] **${new Date()
+    .toISOString()
+    .slice(0, 15)}**\n`;
   const openOrders: any = await getOpenOrders();
   let canceleds = 0;
   for (const oo of openOrders) {
@@ -149,14 +176,19 @@ export const cancelOpenOrdersAndSwapToUsd = async (pairs: string[], usdSymbol: s
       timestamp: new Date().getTime(),
     });
     const signature = signatureBinanceApi(qs);
-    const cancelReq = await request(`https://api1.binance.com/api/v3/order?${qs}&signature=${signature}`, {
-      method: 'DELETE',
-      headers: {
-        'X-MBX-APIKEY': getApiKey(),
-      },
-    });
+    const cancelReq = await request(
+      `https://api1.binance.com/api/v3/order?${qs}&signature=${signature}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'X-MBX-APIKEY': getApiKey(),
+        },
+      }
+    );
     if (cancelReq.statusCode !== 200) {
-      console.log(`error could not cancel order ${oo.orderId}/${oo.symbol}, status code : ${cancelReq.statusCode}`);
+      console.log(
+        `error could not cancel order ${oo.orderId}/${oo.symbol}, status code : ${cancelReq.statusCode}`
+      );
       continue;
     }
     canceleds += 1;

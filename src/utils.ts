@@ -23,10 +23,15 @@ export const getSecretKey = () => {
     if (verbose) console.log(`got secret key from process env`);
     return process.env.BINANCE_SECRET_KEY || '';
   } else if (getProcessArgv('--binance-secret-key')) {
-    if (verbose) console.log(`got secret key from --binance-secret-key command line parameter`);
+    if (verbose)
+      console.log(
+        `got secret key from --binance-secret-key command line parameter`
+      );
     return getProcessArgv('--binance-secret-key') || '';
   } else {
-    throw new Error('No secret key, use either env.BINANCE_SECRET_KEY or --binance-secret-key');
+    throw new Error(
+      'No secret key, use either env.BINANCE_SECRET_KEY or --binance-secret-key'
+    );
   }
 };
 
@@ -35,10 +40,13 @@ export const getApiKey = () => {
     if (verbose) console.log(`got api key from process env`);
     return process.env.BINANCE_API_KEY || '';
   } else if (getProcessArgv('--binance-api-key')) {
-    if (verbose) console.log(`got api key from --binance-api-key command line parameter`);
+    if (verbose)
+      console.log(`got api key from --binance-api-key command line parameter`);
     return getProcessArgv('--binance-api-key') || '';
   } else {
-    throw new Error('No api key, use either env.BINANCE_API_KEY or --binance-api-key');
+    throw new Error(
+      'No api key, use either env.BINANCE_API_KEY or --binance-api-key'
+    );
   }
 };
 
