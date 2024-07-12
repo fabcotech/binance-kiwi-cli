@@ -27,8 +27,8 @@ export const cancelOpenOrders = async () => {
     );
     if (cancelReq.statusCode !== 200) {
       console.error(`error could not cancel order ${oo.orderId}/${oo.symbol}`);
-      console.log(await exchangeInfoReq.body.text());
-      throw new Error(`status code not 200 : ${exchangeInfoReq.statusCode}`);
+      console.log(await cancelReq.body.text());
+      throw new Error(`status code not 200 : ${cancelReq.statusCode}`);
       continue;
     }
     canceleds += 1;
