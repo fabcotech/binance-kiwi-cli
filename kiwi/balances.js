@@ -89,7 +89,9 @@ var printBalances = function (symbols, usdSymbol) { return __awaiter(void 0, voi
                                 priceUsd = _e.apply(void 0, [(_f.sent()).price]);
                                 b = 0;
                                 try {
-                                    b = parseFloat(balances.balances.find(function (b) { return [symbol, symbol.toUpperCase()].includes(b.asset); }).free);
+                                    b = parseFloat(balances.balances.find(function (b) {
+                                        return [symbol, symbol.toUpperCase()].includes(b.asset);
+                                    }).free);
                                 }
                                 catch (err) {
                                     // do nothing;
@@ -100,7 +102,9 @@ var printBalances = function (symbols, usdSymbol) { return __awaiter(void 0, voi
                                     usdAmountN = (0, utils_1.round4)(b * priceUsd);
                                     usdAmount = "~".concat(usdAmountN, " ").concat(usdSymbol);
                                 }
-                                s += "\n".concat(symbol.padEnd(5, ' '), " ").concat(b.toString().padEnd(10, ' '), " ").concat(usdAmount);
+                                s += "\n".concat(symbol.padEnd(5, ' '), " ").concat(b
+                                    .toString()
+                                    .padEnd(10, ' '), " ").concat(usdAmount);
                                 obj[symbol] = { quantity: b, usdAmount: usdAmountN };
                                 return [2 /*return*/];
                         }
@@ -142,7 +146,9 @@ var printBalances = function (symbols, usdSymbol) { return __awaiter(void 0, voi
                     usdAmountN = (0, utils_1.round4)(b * priceUsd);
                     usdAmount = "~".concat(usdAmountN, " ").concat(usdSymbol);
                 }
-                s += "\n".concat(bal.asset.toUpperCase().padEnd(5, ' '), " ").concat(b.toString().padEnd(10, ' '), " ").concat(usdAmount);
+                s += "\n".concat(bal.asset.toUpperCase().padEnd(5, ' '), " ").concat(b
+                    .toString()
+                    .padEnd(10, ' '), " ").concat(usdAmount);
                 obj[bal.asset.toUpperCase()] = { quantity: b, usdAmount: usdAmountN };
                 _d.label = 9;
             case 9:

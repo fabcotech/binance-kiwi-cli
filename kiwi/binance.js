@@ -39,11 +39,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeSellTradeMarket = exports.getOpenOrders = exports.signatureBinanceApi = void 0;
+exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeSellTradeMarket = exports.getOpenOrders = exports.signatureBinanceApi = exports.apiBase = void 0;
 var crypto_1 = __importDefault(require("crypto"));
 var querystring_1 = __importDefault(require("querystring"));
 var undici_1 = require("undici");
 var utils_1 = require("./utils");
+exports.apiBase = 'https://api1.binance.com/api/v3/';
 var signatureBinanceApi = function (qs) {
     return crypto_1.default.createHmac('sha256', (0, utils_1.getSecretKey)()).update(qs).digest('hex');
 };
@@ -58,7 +59,7 @@ var getBalanceBinance = function (symbol) { return __awaiter(void 0, void 0, voi
                     omitZeroBalances: true,
                 });
                 signature = (0, exports.signatureBinanceApi)(qs);
-                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/account?".concat(qs, "&signature=").concat(signature), {
+                return [4 /*yield*/, (0, undici_1.request)("".concat(exports.apiBase, "account?").concat(qs, "&signature=").concat(signature), {
                         method: 'GET',
                         headers: {
                             'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
@@ -82,24 +83,30 @@ var getBalanceBinance = function (symbol) { return __awaiter(void 0, void 0, voi
     });
 }); };
 var getOpenOrders = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var qs, signature, tradesReq;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var qs, signature, openOrdersReq, _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 qs = querystring_1.default.stringify({
                     timestamp: new Date().getTime(),
                 });
                 signature = (0, exports.signatureBinanceApi)(qs);
-                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/openOrders?".concat(qs, "&signature=").concat(signature), {
+                return [4 /*yield*/, (0, undici_1.request)("".concat(exports.apiBase, "openOrders?").concat(qs, "&signature=").concat(signature), {
                         method: 'GET',
                         headers: {
                             'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
                         },
                     })];
             case 1:
-                tradesReq = _a.sent();
-                return [4 /*yield*/, tradesReq.body.json()];
-            case 2: return [2 /*return*/, _a.sent()];
+                openOrdersReq = _c.sent();
+                if (!(openOrdersReq.statusCode !== 200)) return [3 /*break*/, 3];
+                _b = (_a = console).log;
+                return [4 /*yield*/, openOrdersReq.body.text()];
+            case 2:
+                _b.apply(_a, [_c.sent()]);
+                throw new Error("status code not 200 : ".concat(openOrdersReq.statusCode));
+            case 3: return [4 /*yield*/, openOrdersReq.body.json()];
+            case 4: return [2 /*return*/, _c.sent()];
         }
     });
 }); };
@@ -109,7 +116,9 @@ var placeSellTradeMarket = function (pair, balance) { return __awaiter(void 0, v
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                s = "[placeSellTradeMarket] **".concat(new Date().toISOString().slice(0, 15), "** place sell trade on ").concat(pair, "\n");
+                s = "[placeSellTradeMarket] **".concat(new Date()
+                    .toISOString()
+                    .slice(0, 15), "** place sell trade on ").concat(pair, "\n");
                 qs = querystring_1.default.stringify({
                     symbol: pair,
                     side: 'sell',
@@ -118,7 +127,7 @@ var placeSellTradeMarket = function (pair, balance) { return __awaiter(void 0, v
                     quantity: balance.toString(),
                 });
                 signature = (0, exports.signatureBinanceApi)(qs);
-                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/order?".concat(qs, "&signature=").concat(signature), {
+                return [4 /*yield*/, (0, undici_1.request)("".concat(exports.apiBase, "order?").concat(qs, "&signature=").concat(signature), {
                         method: 'POST',
                         headers: {
                             'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
@@ -127,14 +136,11 @@ var placeSellTradeMarket = function (pair, balance) { return __awaiter(void 0, v
             case 1:
                 placeOrderReq = _c.sent();
                 if (!(placeOrderReq.statusCode !== 200)) return [3 /*break*/, 3];
-                s += "order was not placed ".concat(placeOrderReq.statusCode, ":\n");
-                _a = s;
-                _b = "".concat;
+                _b = (_a = console).log;
                 return [4 /*yield*/, placeOrderReq.body.text()];
             case 2:
-                s = _a + _b.apply("", [_c.sent(), ":\n"]);
-                console.log(s);
-                return [2 /*return*/];
+                _b.apply(_a, [_c.sent()]);
+                throw new Error("status code not 200 : ".concat(placeOrderReq.statusCode));
             case 3: return [4 /*yield*/, placeOrderReq.body.json()];
             case 4:
                 binanceOrder = _c.sent();
@@ -148,19 +154,25 @@ var placeSellTradeMarket = function (pair, balance) { return __awaiter(void 0, v
 }); };
 exports.placeSellTradeMarket = placeSellTradeMarket;
 var getSymbolInfo = function (symbol) { return __awaiter(void 0, void 0, void 0, function () {
-    var exchangeInfo;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/exchangeInfo?symbol=".concat(symbol.toUpperCase()), {
+    var exchangeInfoReq, _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0: return [4 /*yield*/, (0, undici_1.request)("".concat(exports.apiBase, "exchangeInfo?symbol=").concat(symbol.toUpperCase()), {
                     method: 'GET',
                     headers: {
                         'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
                     },
                 })];
             case 1:
-                exchangeInfo = _a.sent();
-                return [4 /*yield*/, exchangeInfo.body.json()];
-            case 2: return [2 /*return*/, _a.sent()];
+                exchangeInfoReq = _c.sent();
+                if (!(exchangeInfoReq.statusCode !== 200)) return [3 /*break*/, 3];
+                _b = (_a = console).log;
+                return [4 /*yield*/, exchangeInfoReq.body.text()];
+            case 2:
+                _b.apply(_a, [_c.sent()]);
+                throw new Error("status code not 200 : ".concat(exchangeInfoReq.statusCode));
+            case 3: return [4 /*yield*/, exchangeInfoReq.body.json()];
+            case 4: return [2 /*return*/, _c.sent()];
         }
     });
 }); };
@@ -169,7 +181,7 @@ var getPriceTicker = function (symbol) { return __awaiter(void 0, void 0, void 0
     var resp;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/ticker/price?symbol=".concat(symbol.toUpperCase()), {
+            case 0: return [4 /*yield*/, (0, undici_1.request)("".concat(exports.apiBase, "ticker/price?symbol=").concat(symbol.toUpperCase()), {
                     method: 'GET',
                     headers: {
                         'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
@@ -260,7 +272,9 @@ var cancelOpenOrdersAndSwapToUsd = function (pairs, usdSymbol) { return __awaite
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                s = "[cancelOpenOrdersAndSwapToUsdt] **".concat(new Date().toISOString().slice(0, 15), "**\n");
+                s = "[cancelOpenOrdersAndSwapToUsdt] **".concat(new Date()
+                    .toISOString()
+                    .slice(0, 15), "**\n");
                 return [4 /*yield*/, (0, exports.getOpenOrders)()];
             case 1:
                 openOrders = _a.sent();
@@ -276,7 +290,7 @@ var cancelOpenOrdersAndSwapToUsd = function (pairs, usdSymbol) { return __awaite
                     timestamp: new Date().getTime(),
                 });
                 signature = (0, exports.signatureBinanceApi)(qs);
-                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/order?".concat(qs, "&signature=").concat(signature), {
+                return [4 /*yield*/, (0, undici_1.request)("".concat(exports.apiBase, "order?").concat(qs, "&signature=").concat(signature), {
                         method: 'DELETE',
                         headers: {
                             'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
