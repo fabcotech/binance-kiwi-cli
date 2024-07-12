@@ -81,10 +81,8 @@ export const placeSellTradeMarket = async (pair: string, balance: number) => {
     }
   );
   if (placeOrderReq.statusCode !== 200) {
-    s += `order was not placed ${placeOrderReq.statusCode}:\n`;
-    s += `${await placeOrderReq.body.text()}:\n`;
-    console.log(s);
-    return;
+    console.log(await placeOrderReq.body.text());
+    throw new Error(`status code not 200 : ${placeOrderReq.statusCode}`);
   }
   const binanceOrder = await placeOrderReq.body.json();
   console.log(binanceOrder);
@@ -95,7 +93,7 @@ export const placeSellTradeMarket = async (pair: string, balance: number) => {
 };
 
 export const getSymbolInfo = async (symbol: string) => {
-  const exchangeInfo = await request(
+  const exchangeInfoReq = await request(
     `${apiBase}exchangeInfo?symbol=${symbol.toUpperCase()}`,
     {
       method: 'GET',
@@ -104,7 +102,11 @@ export const getSymbolInfo = async (symbol: string) => {
       },
     }
   );
-  return await exchangeInfo.body.json();
+  if (exchangeInfoReq.statusCode !== 200) {
+    console.log(await exchangeInfoReq.body.text());
+    throw new Error(`status code not 200 : ${exchangeInfoReq.statusCode}`);
+  }
+  return await exchangeInfoReq.body.json();
 };
 
 export const getPriceTicker = async (
