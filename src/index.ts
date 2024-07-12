@@ -19,9 +19,6 @@ const f = () => {
     getSingleProcessArgv('--cancel-open-orders') ||
     getSingleProcessArgv('-c')
   ) {
-    const argv = getSingleProcessArgv('--cancel-open-orders')
-      ? getProcessArgv('--cancel-open-orders')
-      : getProcessArgv('-c');
     cancelOpenOrders();
   } else {
     console.error('Unrecognized command');
