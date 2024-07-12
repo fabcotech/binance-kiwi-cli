@@ -42,7 +42,7 @@ export const getOpenOrders = async (): Promise<any> => {
     timestamp: new Date().getTime(),
   });
   const signature = signatureBinanceApi(qs);
-  const tradesReq = await request(
+  const openOrdersReq = await request(
     `${apiBase}openOrders?${qs}&signature=${signature}`,
     {
       method: 'GET',
@@ -51,7 +51,11 @@ export const getOpenOrders = async (): Promise<any> => {
       },
     }
   );
-  return await tradesReq.body.json();
+  if (openOrdersReq.statusCode !== 200) {
+    console.log(await openOrdersReq.body.text());
+    throw new Error(`status code not 200 : ${openOrdersReq.statusCode}`);
+  }
+  return await openOrdersReq.body.json();
 };
 
 export const placeSellTradeMarket = async (pair: string, balance: number) => {
