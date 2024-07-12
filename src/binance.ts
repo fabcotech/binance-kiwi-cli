@@ -4,6 +4,8 @@ import { request } from 'undici';
 
 import { getSecretKey, getApiKey } from './utils';
 
+export const apiBase = 'https://api1.binance.com/api/v3/';
+
 export const signatureBinanceApi = (qs: string) => {
   return crypto.createHmac('sha256', getSecretKey()).update(qs).digest('hex');
 };
@@ -15,7 +17,7 @@ const getBalanceBinance = async (symbol: string) => {
   });
   const signature = signatureBinanceApi(qs);
   const accountReq = await request(
-    `https://api1.binance.com/api/v3/account?${qs}&signature=${signature}`,
+    `${apiBase}account?${qs}&signature=${signature}`,
     {
       method: 'GET',
       headers: {
@@ -35,13 +37,13 @@ const getBalanceBinance = async (symbol: string) => {
   }
 };
 
-export const getOpenOrders = async () => {
+export const getOpenOrders = async (): Promise<any> => {
   const qs = querystring.stringify({
     timestamp: new Date().getTime(),
   });
   const signature = signatureBinanceApi(qs);
   const tradesReq = await request(
-    `https://api1.binance.com/api/v3/openOrders?${qs}&signature=${signature}`,
+    `${apiBase}openOrders?${qs}&signature=${signature}`,
     {
       method: 'GET',
       headers: {
@@ -66,7 +68,7 @@ export const placeSellTradeMarket = async (pair: string, balance: number) => {
   const signature = signatureBinanceApi(qs);
 
   const placeOrderReq = await request(
-    `https://api1.binance.com/api/v3/order?${qs}&signature=${signature}`,
+    `${apiBase}order?${qs}&signature=${signature}`,
     {
       method: 'POST',
       headers: {
@@ -90,7 +92,7 @@ export const placeSellTradeMarket = async (pair: string, balance: number) => {
 
 export const getSymbolInfo = async (symbol: string) => {
   const exchangeInfo = await request(
-    `https://api1.binance.com/api/v3/exchangeInfo?symbol=${symbol.toUpperCase()}`,
+    `${apiBase}exchangeInfo?symbol=${symbol.toUpperCase()}`,
     {
       method: 'GET',
       headers: {
@@ -105,7 +107,7 @@ export const getPriceTicker = async (
   symbol: string
 ): Promise<{ price: string; symbol: string }> => {
   const resp = await request(
-    `https://api1.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`,
+    `${apiBase}ticker/price?symbol=${symbol.toUpperCase()}`,
     {
       method: 'GET',
       headers: {
@@ -177,7 +179,7 @@ export const cancelOpenOrdersAndSwapToUsd = async (
     });
     const signature = signatureBinanceApi(qs);
     const cancelReq = await request(
-      `https://api1.binance.com/api/v3/order?${qs}&signature=${signature}`,
+      `${apiBase}order?${qs}&signature=${signature}`,
       {
         method: 'DELETE',
         headers: {

@@ -35,7 +35,10 @@ node kiwi -b ETH,SOL --json
 
 #### Cancel all open orders
 
-Coming soon
+```sh
+node kiwi --cancel-open-orders
+node kiwi -c
+```
 
 #### Swap all to USDC
 
