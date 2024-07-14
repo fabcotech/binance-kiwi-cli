@@ -16,9 +16,6 @@ var f = function () {
     }
     else if ((0, utils_1.getSingleProcessArgv)('--cancel-open-orders') ||
         (0, utils_1.getSingleProcessArgv)('-c')) {
-        var argv = (0, utils_1.getSingleProcessArgv)('--cancel-open-orders')
-            ? (0, utils_1.getProcessArgv)('--cancel-open-orders')
-            : (0, utils_1.getProcessArgv)('-c');
         (0, cancelOpenOrders_1.cancelOpenOrders)();
     }
     else {

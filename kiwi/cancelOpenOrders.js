@@ -45,20 +45,20 @@ var undici_1 = require("undici");
 var utils_1 = require("./utils");
 var binance_1 = require("./binance");
 var cancelOpenOrders = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var openOrders, canceleds, _i, openOrders_1, oo, qs, signature, cancelReq, openOrders2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var openOrders, canceleds, _i, openOrders_1, oo, qs, signature, cancelReq, _a, _b, openOrders2;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0: return [4 /*yield*/, (0, binance_1.getOpenOrders)()];
             case 1:
-                openOrders = _a.sent();
+                openOrders = _c.sent();
                 console.log("".concat(openOrders.length, " orders to be canceled"));
                 if (openOrders.length === 0)
                     return [2 /*return*/];
                 canceleds = 0;
                 _i = 0, openOrders_1 = openOrders;
-                _a.label = 2;
+                _c.label = 2;
             case 2:
-                if (!(_i < openOrders_1.length)) return [3 /*break*/, 5];
+                if (!(_i < openOrders_1.length)) return [3 /*break*/, 7];
                 oo = openOrders_1[_i];
                 qs = node_querystring_1.default.stringify({
                     symbol: oo.symbol,
@@ -73,21 +73,25 @@ var cancelOpenOrders = function () { return __awaiter(void 0, void 0, void 0, fu
                         },
                     })];
             case 3:
-                cancelReq = _a.sent();
-                if (cancelReq.statusCode !== 200) {
-                    console.error("error could not cancel order ".concat(oo.orderId, "/").concat(oo.symbol, ", status code : ").concat(cancelReq.statusCode));
-                    return [3 /*break*/, 4];
-                }
-                canceleds += 1;
-                _a.label = 4;
+                cancelReq = _c.sent();
+                if (!(cancelReq.statusCode !== 200)) return [3 /*break*/, 5];
+                console.error("error could not cancel order ".concat(oo.orderId, "/").concat(oo.symbol));
+                _b = (_a = console).log;
+                return [4 /*yield*/, cancelReq.body.text()];
             case 4:
+                _b.apply(_a, [_c.sent()]);
+                throw new Error("status code not 200 : ".concat(cancelReq.statusCode));
+            case 5:
+                canceleds += 1;
+                _c.label = 6;
+            case 6:
                 _i++;
                 return [3 /*break*/, 2];
-            case 5:
+            case 7:
                 console.log("".concat(canceleds, " orders succesfully canceled"));
                 return [4 /*yield*/, (0, binance_1.getOpenOrders)()];
-            case 6:
-                openOrders2 = _a.sent();
+            case 8:
+                openOrders2 = _c.sent();
                 console.log("".concat(openOrders2.length, " orders still open"));
                 return [2 /*return*/];
         }
