@@ -10,6 +10,24 @@ export const signatureBinanceApi = (qs: string) => {
   return crypto.createHmac('sha256', getSecretKey()).update(qs).digest('hex');
 };
 
+export const getBalancesBinance = async (): Promise<any> => {
+  const qs = querystring.stringify({
+    timestamp: new Date().getTime(),
+    omitZeroBalances: true,
+  });
+  const signature = signatureBinanceApi(qs);
+  const accountReq = await request(
+    `https://api1.binance.com/api/v3/account?${qs}&signature=${signature}`,
+    {
+      method: 'GET',
+      headers: {
+        'X-MBX-APIKEY': getApiKey(),
+      },
+    }
+  );
+  return await accountReq.body.json();
+};
+
 const getBalanceBinance = async (symbol: string) => {
   const qs = querystring.stringify({
     timestamp: new Date().getTime(),

@@ -1,26 +1,13 @@
 import querystring from 'node:querystring';
 import { request } from 'undici';
 
-import { getApiKey, getSingleProcessArgv, round4 } from './utils';
+import {
+  getApiKey,
+  getSingleProcessArgv,
+  round4,
+  getBalancesBinance,
+} from './utils';
 import { signatureBinanceApi, getPriceTicker } from './binance';
-
-const getBalancesBinance = async (): Promise<any> => {
-  const qs = querystring.stringify({
-    timestamp: new Date().getTime(),
-    omitZeroBalances: true,
-  });
-  const signature = signatureBinanceApi(qs);
-  const accountReq = await request(
-    `https://api1.binance.com/api/v3/account?${qs}&signature=${signature}`,
-    {
-      method: 'GET',
-      headers: {
-        'X-MBX-APIKEY': getApiKey(),
-      },
-    }
-  );
-  return await accountReq.body.json();
-};
 
 export const printBalances = async (symbols: string[], usdSymbol: string) => {
   const obj: { [symbol: string]: any } = {};
