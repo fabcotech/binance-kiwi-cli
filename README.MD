@@ -42,7 +42,11 @@ node kiwi -c
 
 #### Swap all to USDC
 
-Coming soon
+Will swap every available asset (only >5USD balances) to master USD (right now USDC). Will use market limit order.
+
+```sh
+node kiwi --swap-all-usd
+```
 
 #### Buy with USDC with a limit order at market price
 

@@ -35,38 +35,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.printBalances = void 0;
-var node_querystring_1 = __importDefault(require("node:querystring"));
-var undici_1 = require("undici");
 var utils_1 = require("./utils");
 var binance_1 = require("./binance");
-var getBalancesBinance = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var qs, signature, accountReq;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                qs = node_querystring_1.default.stringify({
-                    timestamp: new Date().getTime(),
-                    omitZeroBalances: true,
-                });
-                signature = (0, binance_1.signatureBinanceApi)(qs);
-                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/account?".concat(qs, "&signature=").concat(signature), {
-                        method: 'GET',
-                        headers: {
-                            'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
-                        },
-                    })];
-            case 1:
-                accountReq = _a.sent();
-                return [4 /*yield*/, accountReq.body.json()];
-            case 2: return [2 /*return*/, _a.sent()];
-        }
-    });
-}); };
 var printBalances = function (symbols, usdSymbol) { return __awaiter(void 0, void 0, void 0, function () {
     var obj, s, balances, _loop_1, _i, symbols_1, symbol, _a, _b, bal, priceUsd, _c, b, usdAmount, usdAmountN;
     return __generator(this, function (_d) {
@@ -74,7 +46,7 @@ var printBalances = function (symbols, usdSymbol) { return __awaiter(void 0, voi
             case 0:
                 obj = {};
                 s = '';
-                return [4 /*yield*/, getBalancesBinance()];
+                return [4 /*yield*/, (0, binance_1.getBalancesBinance)()];
             case 1:
                 balances = _d.sent();
                 if (!symbols.length) return [3 /*break*/, 6];

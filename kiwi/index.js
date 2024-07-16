@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var balances_1 = require("./balances");
 var cancelOpenOrders_1 = require("./cancelOpenOrders");
+var swapAllUsd_1 = require("./swapAllUsd");
 var utils_1 = require("./utils");
 var masterUSD = 'USDC';
 var f = function () {
@@ -17,6 +18,10 @@ var f = function () {
     else if ((0, utils_1.getSingleProcessArgv)('--cancel-open-orders') ||
         (0, utils_1.getSingleProcessArgv)('-c')) {
         (0, cancelOpenOrders_1.cancelOpenOrders)();
+    }
+    else if ((0, utils_1.getSingleProcessArgv)('--swap-all-usd') ||
+        (0, utils_1.getSingleProcessArgv)('-susd')) {
+        (0, swapAllUsd_1.swapAllUsd)(masterUSD);
     }
     else {
         console.error('Unrecognized command');

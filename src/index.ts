@@ -1,5 +1,7 @@
 import { printBalances } from './balances';
 import { cancelOpenOrders } from './cancelOpenOrders';
+import { swapAllUsd } from './swapAllUsd';
+import { swap } from './swap';
 import { getProcessArgv, getSingleProcessArgv } from './utils';
 
 const masterUSD = 'USDC';
@@ -20,6 +22,8 @@ const f = () => {
     getSingleProcessArgv('-c')
   ) {
     cancelOpenOrders();
+  } else if (getSingleProcessArgv('--swap-all-usd')) {
+    swapAllUsd(masterUSD);
   } else {
     console.error('Unrecognized command');
     process.exit(1);

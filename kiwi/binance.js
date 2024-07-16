@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeSellTradeMarket = exports.getOpenOrders = exports.signatureBinanceApi = exports.apiBase = void 0;
+exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeSellTradeMarket = exports.getOpenOrders = exports.getBalancesBinance = exports.signatureBinanceApi = exports.apiBase = void 0;
 var crypto_1 = __importDefault(require("crypto"));
 var querystring_1 = __importDefault(require("querystring"));
 var undici_1 = require("undici");
@@ -49,6 +49,30 @@ var signatureBinanceApi = function (qs) {
     return crypto_1.default.createHmac('sha256', (0, utils_1.getSecretKey)()).update(qs).digest('hex');
 };
 exports.signatureBinanceApi = signatureBinanceApi;
+var getBalancesBinance = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var qs, signature, accountReq;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                qs = querystring_1.default.stringify({
+                    timestamp: new Date().getTime(),
+                    omitZeroBalances: true,
+                });
+                signature = (0, exports.signatureBinanceApi)(qs);
+                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/account?".concat(qs, "&signature=").concat(signature), {
+                        method: 'GET',
+                        headers: {
+                            'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
+                        },
+                    })];
+            case 1:
+                accountReq = _a.sent();
+                return [4 /*yield*/, accountReq.body.json()];
+            case 2: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getBalancesBinance = getBalancesBinance;
 var getBalanceBinance = function (symbol) { return __awaiter(void 0, void 0, void 0, function () {
     var qs, signature, accountReq, json;
     return __generator(this, function (_a) {
