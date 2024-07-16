@@ -1,13 +1,12 @@
 import querystring from 'node:querystring';
 import { request } from 'undici';
 
+import { getApiKey, getSingleProcessArgv, round4 } from './utils';
 import {
-  getApiKey,
-  getSingleProcessArgv,
-  round4,
+  signatureBinanceApi,
+  getPriceTicker,
   getBalancesBinance,
-} from './utils';
-import { signatureBinanceApi, getPriceTicker } from './binance';
+} from './binance';
 
 export const printBalances = async (symbols: string[], usdSymbol: string) => {
   const obj: { [symbol: string]: any } = {};

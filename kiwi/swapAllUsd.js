@@ -59,7 +59,6 @@ var swapAllUsd = function (masterUSD) { return __awaiter(void 0, void 0, void 0,
             case 3:
                 _d.trys.push([3, 5, , 6]);
                 pair = "".concat(bal.asset).concat(masterUSD);
-                console.log(pair);
                 _b = parseFloat;
                 return [4 /*yield*/, (0, binance_1.getPriceTicker)(pair)];
             case 4:
@@ -70,8 +69,8 @@ var swapAllUsd = function (masterUSD) { return __awaiter(void 0, void 0, void 0,
                 return [3 /*break*/, 6];
             case 5:
                 err_1 = _d.sent();
-                console.error(err_1);
-                console.error("could not get price, ignoring asset ".concat(bal.asset));
+                /* console.error(err);
+                console.error(`could not get price, ignoring asset ${bal.asset}`); */
                 return [3 /*break*/, 6];
             case 6:
                 _i++;

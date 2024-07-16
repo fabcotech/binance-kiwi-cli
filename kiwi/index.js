@@ -19,8 +19,7 @@ var f = function () {
         (0, utils_1.getSingleProcessArgv)('-c')) {
         (0, cancelOpenOrders_1.cancelOpenOrders)();
     }
-    else if ((0, utils_1.getSingleProcessArgv)('--swap-all-usd') ||
-        (0, utils_1.getSingleProcessArgv)('-susd')) {
+    else if ((0, utils_1.getSingleProcessArgv)('--swap-all-usd')) {
         (0, swapAllUsd_1.swapAllUsd)(masterUSD);
     }
     else {
