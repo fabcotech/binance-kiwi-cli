@@ -135,16 +135,16 @@ var getOpenOrders = function () { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 exports.getOpenOrders = getOpenOrders;
-var placeSellTradeMarket = function (pair, balance) { return __awaiter(void 0, void 0, void 0, function () {
+var placeSellTradeMarket = function (symbol, balance) { return __awaiter(void 0, void 0, void 0, function () {
     var s, qs, signature, placeOrderReq, _a, _b, binanceOrder;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 s = "[placeSellTradeMarket] **".concat(new Date()
                     .toISOString()
-                    .slice(0, 15), "** place sell trade on ").concat(pair, "\n");
+                    .slice(0, 15), "** place sell trade on ").concat(symbol, "\n");
                 qs = querystring_1.default.stringify({
-                    symbol: pair,
+                    symbol: symbol,
                     side: 'sell',
                     timestamp: new Date().getTime(),
                     type: 'MARKET',
@@ -168,7 +168,6 @@ var placeSellTradeMarket = function (pair, balance) { return __awaiter(void 0, v
             case 3: return [4 /*yield*/, placeOrderReq.body.json()];
             case 4:
                 binanceOrder = _c.sent();
-                console.log(binanceOrder);
                 s += "sell order was successfully placed \n";
                 console.log(s);
                 console.log("```".concat(JSON.stringify(binanceOrder, null, 1), "```"));

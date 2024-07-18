@@ -40,7 +40,7 @@ exports.swapAllUsd = void 0;
 var utils_1 = require("./utils");
 var binance_1 = require("./binance");
 var swapAllUsd = function (masterUSD) { return __awaiter(void 0, void 0, void 0, function () {
-    var s, balances, pairs, _i, _a, bal, priceUsd, pair, _b, err_1, _c, pairs_1, pair;
+    var s, balances, pairs, _i, _a, bal, priceUsd, pair, _b, err_1, _c, pairs_1, pair, binanceOrder;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
@@ -64,7 +64,11 @@ var swapAllUsd = function (masterUSD) { return __awaiter(void 0, void 0, void 0,
             case 4:
                 priceUsd = _b.apply(void 0, [(_d.sent()).price]);
                 if (priceUsd * parseFloat(bal.free) > 5) {
-                    pairs.push({ balance: priceUsd * parseFloat(bal.free), symbol: pair });
+                    pairs.push({
+                        balance: bal.free,
+                        balanceUsd: priceUsd * parseFloat(bal.free),
+                        symbol: pair,
+                    });
                 }
                 return [3 /*break*/, 6];
             case 5:
@@ -76,11 +80,20 @@ var swapAllUsd = function (masterUSD) { return __awaiter(void 0, void 0, void 0,
                 _i++;
                 return [3 /*break*/, 2];
             case 7:
-                for (_c = 0, pairs_1 = pairs; _c < pairs_1.length; _c++) {
-                    pair = pairs_1[_c];
-                    console.log("will swap all ".concat(pair.symbol.replace(masterUSD, ''), " (approx ").concat((0, utils_1.round2)(pair.balance), " ").concat(masterUSD, ") to ").concat(masterUSD));
-                }
-                return [2 /*return*/];
+                _c = 0, pairs_1 = pairs;
+                _d.label = 8;
+            case 8:
+                if (!(_c < pairs_1.length)) return [3 /*break*/, 11];
+                pair = pairs_1[_c];
+                console.log("will swap all ".concat(pair.symbol.replace(masterUSD, ''), " (approx ").concat((0, utils_1.round2)(pair.balanceUsd), " ").concat(masterUSD, ") to ").concat(masterUSD));
+                return [4 /*yield*/, (0, binance_1.placeSellTradeMarket)(pair.symbol, pair.balance)];
+            case 9:
+                binanceOrder = _d.sent();
+                _d.label = 10;
+            case 10:
+                _c++;
+                return [3 /*break*/, 8];
+            case 11: return [2 /*return*/];
         }
     });
 }); };

@@ -2,7 +2,7 @@ export declare const apiBase = "https://api1.binance.com/api/v3/";
 export declare const signatureBinanceApi: (qs: string) => string;
 export declare const getBalancesBinance: () => Promise<any>;
 export declare const getOpenOrders: () => Promise<any>;
-export declare const placeSellTradeMarket: (pair: string, balance: number) => Promise<unknown>;
+export declare const placeSellTradeMarket: (symbol: string, balance: number) => Promise<unknown>;
 export declare const getSymbolInfo: (symbol: string) => Promise<unknown>;
 export declare const getPriceTicker: (symbol: string) => Promise<{
     price: string;

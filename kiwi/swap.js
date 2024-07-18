@@ -37,10 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.swap = void 0;
-var swap = function (masterUSD, symbol) { return __awaiter(void 0, void 0, void 0, function () {
+var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void 0, function () {
+    var twoAssets;
     return __generator(this, function (_a) {
-        if (!symbol.includes(masterUSD))
-            throw new Error("".concat(symbol, " does not include ").concat(masterUSD, ", cannot swap"));
+        twoAssets = swapArg.split('->').map(function (a) { return (a || '').toUpperCase(); });
+        if (!twoAssets.includes(masterUSD))
+            throw new Error("".concat(swapArg, " does not include ").concat(masterUSD, ", cannot swap"));
+        console.log(twoAssets);
         return [2 /*return*/];
     });
 }); };

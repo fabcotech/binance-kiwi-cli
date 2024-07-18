@@ -8,4 +8,5 @@ export const swap = async (masterUSD: string, swapArg: string) => {
   const twoAssets = swapArg.split('->').map((a) => (a || '').toUpperCase());
   if (!twoAssets.includes(masterUSD))
     throw new Error(`${swapArg} does not include ${masterUSD}, cannot swap`);
+  console.log(twoAssets);
 };

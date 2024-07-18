@@ -1,1 +1,1 @@
-{"version":3,"file":"swap.d.ts","sourceRoot":"","sources":["../src/swap.ts"],"names":[],"mappings":"AAMA,eAAO,MAAM,IAAI,cAAqB,MAAM,UAAU,MAAM,kBAG3D,CAAC"}
+{"version":3,"file":"swap.d.ts","sourceRoot":"","sources":["../src/swap.ts"],"names":[],"mappings":"AAMA,eAAO,MAAM,IAAI,cAAqB,MAAM,WAAW,MAAM,kBAK5D,CAAC"}

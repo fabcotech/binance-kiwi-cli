@@ -1,2 +1,2 @@
-export declare const swap: (masterUSD: string, symbol: string) => Promise<void>;
+export declare const swap: (masterUSD: string, swapArg: string) => Promise<void>;
 //# sourceMappingURL=swap.d.ts.map
