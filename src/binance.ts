@@ -76,12 +76,12 @@ export const getOpenOrders = async (): Promise<any> => {
   return await openOrdersReq.body.json();
 };
 
-export const placeSellTradeMarket = async (pair: string, balance: number) => {
+export const placeSellTradeMarket = async (symbol: string, balance: number) => {
   let s = `[placeSellTradeMarket] **${new Date()
     .toISOString()
-    .slice(0, 15)}** place sell trade on ${pair}\n`;
+    .slice(0, 15)}** place sell trade on ${symbol}\n`;
   const qs = querystring.stringify({
-    symbol: pair,
+    symbol: symbol,
     side: 'sell',
     timestamp: new Date().getTime(),
     type: 'MARKET',
@@ -103,7 +103,6 @@ export const placeSellTradeMarket = async (pair: string, balance: number) => {
     throw new Error(`status code not 200 : ${placeOrderReq.statusCode}`);
   }
   const binanceOrder = await placeOrderReq.body.json();
-  console.log(binanceOrder);
   s += `sell order was successfully placed \n`;
   console.log(s);
   console.log(`\`\`\`${JSON.stringify(binanceOrder, null, 1)}\`\`\``);

@@ -2,7 +2,11 @@ import querystring from 'node:querystring';
 import { request } from 'undici';
 
 import { round2 } from './utils';
-import { getBalancesBinance, getPriceTicker } from './binance';
+import {
+  getBalancesBinance,
+  getPriceTicker,
+  placeSellTradeMarket,
+} from './binance';
 
 export const swapAllUsd = async (masterUSD: string) => {
   let s = '';
@@ -14,7 +18,11 @@ export const swapAllUsd = async (masterUSD: string) => {
       const pair = `${bal.asset}${masterUSD}`;
       priceUsd = parseFloat((await getPriceTicker(pair)).price);
       if (priceUsd * parseFloat(bal.free) > 5) {
-        pairs.push({ balance: priceUsd * parseFloat(bal.free), symbol: pair });
+        pairs.push({
+          balance: bal.free,
+          balanceUsd: priceUsd * parseFloat(bal.free),
+          symbol: pair,
+        });
       }
     } catch (err) {
       /* console.error(err);
@@ -25,8 +33,9 @@ export const swapAllUsd = async (masterUSD: string) => {
   for (const pair of pairs) {
     console.log(
       `will swap all ${pair.symbol.replace(masterUSD, '')} (approx ${round2(
-        pair.balance
+        pair.balanceUsd
       )} ${masterUSD}) to ${masterUSD}`
     );
+    const binanceOrder = await placeSellTradeMarket(pair.symbol, pair.balance);
   }
 };
