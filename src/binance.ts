@@ -28,7 +28,7 @@ export const getBalancesBinance = async (): Promise<any> => {
   return await accountReq.body.json();
 };
 
-const getBalanceBinance = async (symbol: string) => {
+export const getBalanceBinance = async (symbol: string) => {
   const qs = querystring.stringify({
     timestamp: new Date().getTime(),
     omitZeroBalances: true,
