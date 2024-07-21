@@ -1,11 +1,12 @@
 import querystring from 'node:querystring';
 import { request } from 'undici';
 import { stdin, stdout } from 'process';
+import { createInterface } from 'readline';
 
 import { getApiKey } from './utils';
-import { getBalanceBinance } from './binance';
+import { getBalanceBinance, getPriceTicker } from './binance';
 
-const readline = require('readline').createInterface({
+const readline = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
@@ -17,7 +18,7 @@ export const swap = async (masterUSD: string, swapArg: string) => {
   console.log(twoAssets);
   const bal = await getBalanceBinance(twoAssets[0]);
   if (twoAssets[0] === masterUSD) {
-    if (bal > 1) {
+    if (bal < 1) {
       console.error(`${masterUSD} balance is too small: ${bal}, cannot swap`);
       process.exit(1);
     }
@@ -35,5 +36,33 @@ export const swap = async (masterUSD: string, swapArg: string) => {
       );
     });
     console.log('ok swap');
+    process.exit(0);
+  } else {
+    const priceUsd = parseFloat(
+      (await getPriceTicker(`${twoAssets[0]}${masterUSD}`)).price
+    );
+    const balUsd = priceUsd * bal;
+    if (balUsd < 1) {
+      console.error(
+        `${twoAssets[0]} balance is too small: ${bal} (approx ${balUsd} ${masterUSD})`
+      );
+      process.exit(1);
+    }
+    await new Promise((resolve, reject) => {
+      readline.question(
+        `Swap all ${bal} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) tp ${masterUSD} ? yes/y no/n :\n`,
+        (resp: string) => {
+          if (['yes', 'y'].includes(resp)) {
+            resolve(true);
+          } else {
+            reject();
+          }
+          readline.close();
+        }
+      );
+    });
+    console.log(priceUsd);
+    console.log(bal);
+    process.exit(0);
   }
 };
