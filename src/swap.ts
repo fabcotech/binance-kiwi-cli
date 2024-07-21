@@ -24,7 +24,7 @@ export const swap = async (masterUSD: string, swapArg: string) => {
     }
     await new Promise((resolve, reject) => {
       readline.question(
-        `Swap all ${bal} ${masterUSD} to ${twoAssets[1]} ? yes/y no/n :\n`,
+        `Swap 100% of ${bal} ${masterUSD} to ${twoAssets[1]} ? yes/y no/n :\n`,
         (resp: string) => {
           if (['yes', 'y'].includes(resp)) {
             resolve(true);
@@ -50,7 +50,7 @@ export const swap = async (masterUSD: string, swapArg: string) => {
     }
     await new Promise((resolve, reject) => {
       readline.question(
-        `Swap all ${bal} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) tp ${masterUSD} ? yes/y no/n :\n`,
+        `Swap 100% of ${bal} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) tp ${masterUSD} ? yes/y no/n :\n`,
         (resp: string) => {
           if (['yes', 'y'].includes(resp)) {
             resolve(true);
@@ -61,8 +61,7 @@ export const swap = async (masterUSD: string, swapArg: string) => {
         }
       );
     });
-    console.log(priceUsd);
-    console.log(bal);
+    console.log('ok swap');
     process.exit(0);
   }
 };
