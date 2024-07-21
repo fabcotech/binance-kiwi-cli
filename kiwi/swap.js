@@ -37,14 +37,73 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.swap = void 0;
+var readline_1 = require("readline");
+var binance_1 = require("./binance");
+var readline = (0, readline_1.createInterface)({
+    input: process.stdin,
+    output: process.stdout,
+});
 var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void 0, function () {
-    var twoAssets;
-    return __generator(this, function (_a) {
-        twoAssets = swapArg.split('->').map(function (a) { return (a || '').toUpperCase(); });
-        if (!twoAssets.includes(masterUSD))
-            throw new Error("".concat(swapArg, " does not include ").concat(masterUSD, ", cannot swap"));
-        console.log(twoAssets);
-        return [2 /*return*/];
+    var twoAssets, bal, priceUsd, _a, balUsd_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                twoAssets = swapArg.split('->').map(function (a) { return (a || '').toUpperCase(); });
+                if (!twoAssets.includes(masterUSD))
+                    throw new Error("".concat(swapArg, " does not include ").concat(masterUSD, ", cannot swap"));
+                console.log(twoAssets);
+                return [4 /*yield*/, (0, binance_1.getBalanceBinance)(twoAssets[0])];
+            case 1:
+                bal = _b.sent();
+                if (!(twoAssets[0] === masterUSD)) return [3 /*break*/, 3];
+                if (bal < 1) {
+                    console.error("".concat(masterUSD, " balance is too small: ").concat(bal, ", cannot swap"));
+                    process.exit(1);
+                }
+                return [4 /*yield*/, new Promise(function (resolve, reject) {
+                        readline.question("Swap 100% of ".concat(bal, " ").concat(masterUSD, " to ").concat(twoAssets[1], " ? yes/y no/n :\n"), function (resp) {
+                            if (['yes', 'y'].includes(resp)) {
+                                resolve(true);
+                            }
+                            else {
+                                reject();
+                            }
+                            readline.close();
+                        });
+                    })];
+            case 2:
+                _b.sent();
+                console.log('ok swap');
+                process.exit(0);
+                return [3 /*break*/, 6];
+            case 3:
+                _a = parseFloat;
+                return [4 /*yield*/, (0, binance_1.getPriceTicker)("".concat(twoAssets[0]).concat(masterUSD))];
+            case 4:
+                priceUsd = _a.apply(void 0, [(_b.sent()).price]);
+                balUsd_1 = priceUsd * bal;
+                if (balUsd_1 < 1) {
+                    console.error("".concat(twoAssets[0], " balance is too small: ").concat(bal, " (approx ").concat(balUsd_1, " ").concat(masterUSD, ")"));
+                    process.exit(1);
+                }
+                return [4 /*yield*/, new Promise(function (resolve, reject) {
+                        readline.question("Swap 100% of ".concat(bal, " ").concat(twoAssets[0], " (approx ").concat(balUsd_1, " ").concat(masterUSD, ") tp ").concat(masterUSD, " ? yes/y no/n :\n"), function (resp) {
+                            if (['yes', 'y'].includes(resp)) {
+                                resolve(true);
+                            }
+                            else {
+                                reject();
+                            }
+                            readline.close();
+                        });
+                    })];
+            case 5:
+                _b.sent();
+                console.log('ok swap');
+                process.exit(0);
+                _b.label = 6;
+            case 6: return [2 /*return*/];
+        }
     });
 }); };
 exports.swap = swap;

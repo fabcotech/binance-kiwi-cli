@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeSellTradeMarket = exports.getOpenOrders = exports.getBalancesBinance = exports.signatureBinanceApi = exports.apiBase = void 0;
+exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeSellTradeMarket = exports.getOpenOrders = exports.getBalanceBinance = exports.getBalancesBinance = exports.signatureBinanceApi = exports.apiBase = void 0;
 var crypto_1 = __importDefault(require("crypto"));
 var querystring_1 = __importDefault(require("querystring"));
 var undici_1 = require("undici");
@@ -106,6 +106,7 @@ var getBalanceBinance = function (symbol) { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
+exports.getBalanceBinance = getBalanceBinance;
 var getOpenOrders = function () { return __awaiter(void 0, void 0, void 0, function () {
     var qs, signature, openOrdersReq, _a, _b;
     return __generator(this, function (_c) {
@@ -229,7 +230,7 @@ var swapAllToUsd = function (pairs, usdSymbol) { return __awaiter(void 0, void 0
             case 1:
                 if (!(_i < pairs_1.length)) return [3 /*break*/, 5];
                 pair = pairs_1[_i];
-                return [4 /*yield*/, getBalanceBinance(pair.replace(usdSymbol, ''))];
+                return [4 /*yield*/, (0, exports.getBalanceBinance)(pair.replace(usdSymbol, ''))];
             case 2:
                 realBalance = _a.sent();
                 balance = realBalance;
