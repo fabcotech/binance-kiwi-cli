@@ -76,7 +76,11 @@ export const getOpenOrders = async (): Promise<any> => {
   return await openOrdersReq.body.json();
 };
 
-export const placeSellTradeMarket = async (symbol: string, balance: number) => {
+export const placeOrderMarket = async (
+  symbol: string,
+  balance: number,
+  side: 'sell' | 'buy'
+) => {
   let s = `[placeSellTradeMarket] **${new Date()
     .toISOString()
     .slice(0, 15)}** place sell trade on ${symbol}\n`;
@@ -177,7 +181,7 @@ export const swapAllToUsd = async (pairs: string[], usdSymbol: string) => {
       balance = Math.floor(1000 * realBalance) / 1000;
     }
     console.log(s);
-    const binanceOrder = await placeSellTradeMarket(pair, balance);
+    const binanceOrder = await placeOrderMarket(pair, balance, 'sell');
     if (!binanceOrder) {
       console.log(`[placeSellTradeMarket] failed for ${pair}`);
     }

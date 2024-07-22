@@ -4,7 +4,11 @@ import { stdin, stdout } from 'process';
 import { createInterface } from 'readline';
 
 import { getApiKey } from './utils';
-import { getBalanceBinance, getPriceTicker } from './binance';
+import {
+  getBalanceBinance,
+  getPriceTicker,
+  placeSellTradeMarket,
+} from './binance';
 
 const readline = createInterface({
   input: process.stdin,
@@ -36,6 +40,12 @@ export const swap = async (masterUSD: string, swapArg: string) => {
       );
     });
     console.log('ok swap');
+    const binanceOrder = await placeOrderMarket(
+      `${twoAssets[1]}${twoAssets[0]}`,
+      bal,
+      'buy'
+    );
+    console.log(binanceOrder);
     process.exit(0);
   } else {
     const priceUsd = parseFloat(
@@ -62,6 +72,12 @@ export const swap = async (masterUSD: string, swapArg: string) => {
       );
     });
     console.log('ok swap');
+    const binanceOrder = await placeOrderMarket(
+      `${twoAssets[1]}${twoAssets[0]}`,
+      bal,
+      'sell'
+    );
+    console.log(binanceOrder);
     process.exit(0);
   }
 };
