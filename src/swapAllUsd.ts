@@ -5,7 +5,7 @@ import { round2 } from './utils';
 import {
   getBalancesBinance,
   getPriceTicker,
-  placeSellTradeMarket,
+  placeOrderMarket,
 } from './binance';
 
 export const swapAllUsd = async (masterUSD: string) => {

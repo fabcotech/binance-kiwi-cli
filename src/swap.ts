@@ -4,11 +4,7 @@ import { stdin, stdout } from 'process';
 import { createInterface } from 'readline';
 
 import { getApiKey } from './utils';
-import {
-  getBalanceBinance,
-  getPriceTicker,
-  placeSellTradeMarket,
-} from './binance';
+import { getBalanceBinance, getPriceTicker, placeOrderMarket } from './binance';
 
 const readline = createInterface({
   input: process.stdin,
