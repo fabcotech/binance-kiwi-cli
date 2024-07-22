@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeSellTradeMarket = exports.getOpenOrders = exports.getBalanceBinance = exports.getBalancesBinance = exports.signatureBinanceApi = exports.apiBase = void 0;
+exports.cancelOpenOrdersAndSwapToUsd = exports.swapAllToUsd = exports.getPriceTicker = exports.getSymbolInfo = exports.placeOrderMarket = exports.getOpenOrders = exports.getBalanceBinance = exports.getBalancesBinance = exports.signatureBinanceApi = exports.apiBase = void 0;
 var crypto_1 = __importDefault(require("crypto"));
 var querystring_1 = __importDefault(require("querystring"));
 var undici_1 = require("undici");
@@ -136,7 +136,7 @@ var getOpenOrders = function () { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 exports.getOpenOrders = getOpenOrders;
-var placeSellTradeMarket = function (symbol, balance) { return __awaiter(void 0, void 0, void 0, function () {
+var placeOrderMarket = function (symbol, balance, side) { return __awaiter(void 0, void 0, void 0, function () {
     var s, qs, signature, placeOrderReq, _a, _b, binanceOrder;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -176,7 +176,7 @@ var placeSellTradeMarket = function (symbol, balance) { return __awaiter(void 0,
         }
     });
 }); };
-exports.placeSellTradeMarket = placeSellTradeMarket;
+exports.placeOrderMarket = placeOrderMarket;
 var getSymbolInfo = function (symbol) { return __awaiter(void 0, void 0, void 0, function () {
     var exchangeInfoReq, _a, _b;
     return __generator(this, function (_c) {
@@ -276,7 +276,7 @@ var swapAllToUsd = function (pairs, usdSymbol) { return __awaiter(void 0, void 0
                     balance = Math.floor(1000 * realBalance) / 1000;
                 }
                 console.log(s);
-                return [4 /*yield*/, (0, exports.placeSellTradeMarket)(pair, balance)];
+                return [4 /*yield*/, (0, exports.placeOrderMarket)(pair, balance, 'sell')];
             case 3:
                 binanceOrder = _a.sent();
                 if (!binanceOrder) {

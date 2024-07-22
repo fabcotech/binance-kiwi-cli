@@ -44,7 +44,7 @@ var readline = (0, readline_1.createInterface)({
     output: process.stdout,
 });
 var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void 0, function () {
-    var twoAssets, bal, priceUsd, _a, balUsd_1;
+    var twoAssets, bal, binanceOrder, priceUsd, _a, balUsd_1, binanceOrder;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -55,7 +55,7 @@ var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void
                 return [4 /*yield*/, (0, binance_1.getBalanceBinance)(twoAssets[0])];
             case 1:
                 bal = _b.sent();
-                if (!(twoAssets[0] === masterUSD)) return [3 /*break*/, 3];
+                if (!(twoAssets[0] === masterUSD)) return [3 /*break*/, 4];
                 if (bal < 1) {
                     console.error("".concat(masterUSD, " balance is too small: ").concat(bal, ", cannot swap"));
                     process.exit(1);
@@ -73,13 +73,16 @@ var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void
                     })];
             case 2:
                 _b.sent();
-                console.log('ok swap');
-                process.exit(0);
-                return [3 /*break*/, 6];
+                return [4 /*yield*/, (0, binance_1.placeOrderMarket)("".concat(twoAssets[1]).concat(twoAssets[0]), bal, 'buy')];
             case 3:
+                binanceOrder = _b.sent();
+                console.log(binanceOrder);
+                process.exit(0);
+                return [3 /*break*/, 8];
+            case 4:
                 _a = parseFloat;
                 return [4 /*yield*/, (0, binance_1.getPriceTicker)("".concat(twoAssets[0]).concat(masterUSD))];
-            case 4:
+            case 5:
                 priceUsd = _a.apply(void 0, [(_b.sent()).price]);
                 balUsd_1 = priceUsd * bal;
                 if (balUsd_1 < 1) {
@@ -97,12 +100,15 @@ var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void
                             readline.close();
                         });
                     })];
-            case 5:
+            case 6:
                 _b.sent();
-                console.log('ok swap');
+                return [4 /*yield*/, (0, binance_1.placeOrderMarket)("".concat(twoAssets[1]).concat(twoAssets[0]), bal, 'sell')];
+            case 7:
+                binanceOrder = _b.sent();
+                console.log(binanceOrder);
                 process.exit(0);
-                _b.label = 6;
-            case 6: return [2 /*return*/];
+                _b.label = 8;
+            case 8: return [2 /*return*/];
         }
     });
 }); };
