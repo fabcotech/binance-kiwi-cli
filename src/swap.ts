@@ -39,7 +39,6 @@ export const swap = async (masterUSD: string, swapArg: string) => {
         }
       );
     });
-    console.log('ok swap');
     const binanceOrder = await placeOrderMarket(
       `${twoAssets[1]}${twoAssets[0]}`,
       bal,
@@ -71,7 +70,6 @@ export const swap = async (masterUSD: string, swapArg: string) => {
         }
       );
     });
-    console.log('ok swap');
     const binanceOrder = await placeOrderMarket(
       `${twoAssets[1]}${twoAssets[0]}`,
       bal,
