@@ -38,7 +38,7 @@ export const swapAllUsd = async (masterUSD: string) => {
     );
     const binanceOrder = await placeOrderMarket(
       pair.symbol,
-      pair.balance,
+      pair.balance.toString(),
       'sell'
     );
   }

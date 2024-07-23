@@ -78,18 +78,25 @@ export const getOpenOrders = async (): Promise<any> => {
 
 export const placeOrderMarket = async (
   symbol: string,
-  balance: number,
+  balance: string,
   side: 'sell' | 'buy'
 ) => {
   let s = `[placeSellTradeMarket] **${new Date()
     .toISOString()
     .slice(0, 15)}** place sell trade on ${symbol}\n`;
-  const qs = querystring.stringify({
+  console.log({
     symbol: symbol,
-    side: 'sell',
+    side: side,
     timestamp: new Date().getTime(),
     type: 'MARKET',
-    quantity: balance.toString(),
+    ...(side === 'sell' ? { quantity: balance } : { quoteOrderQty: balance }),
+  });
+  const qs = querystring.stringify({
+    symbol: symbol,
+    side: side,
+    timestamp: new Date().getTime(),
+    type: 'MARKET',
+    ...(side === 'sell' ? { quantity: balance } : { quoteOrderQty: balance }),
   });
   const signature = signatureBinanceApi(qs);
 
