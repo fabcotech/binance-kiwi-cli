@@ -50,7 +50,12 @@ node kiwi --swap-all-usd
 
 #### Buy with USDC with a limit order at market price
 
-Coming soon
+```sh
+# swap 100% of available USDC to ETH
+node kiwi --swap "USDC->ETH"
+# swap 100% of available DOGE to USDC
+node kiwi -s "DOGE->USDC"
+```
 
 ### Building (dev)
 
