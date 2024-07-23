@@ -23,8 +23,8 @@ var f = function () {
     else if ((0, utils_1.getSingleProcessArgv)('--swap-all-usd')) {
         (0, swapAllUsd_1.swapAllUsd)(masterUSD);
     }
-    else if ((0, utils_1.getSingleProcessArgv)('--swap')) {
-        (0, swap_1.swap)(masterUSD, (0, utils_1.getProcessArgv)('--swap') || '');
+    else if ((0, utils_1.getSingleProcessArgv)('--swap') || (0, utils_1.getSingleProcessArgv)('-s')) {
+        (0, swap_1.swap)(masterUSD, (0, utils_1.getProcessArgv)('--swap') || (0, utils_1.getProcessArgv)('-s') || '');
     }
     else {
         console.error('Unrecognized command');

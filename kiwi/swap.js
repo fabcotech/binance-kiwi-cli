@@ -37,14 +37,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.swap = void 0;
+var undici_1 = require("undici");
 var readline_1 = require("readline");
+var utils_1 = require("./utils");
 var binance_1 = require("./binance");
 var readline = (0, readline_1.createInterface)({
     input: process.stdin,
     output: process.stdout,
 });
 var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void 0, function () {
-    var twoAssets, bal, binanceOrder, priceUsd, _a, balUsd_1, binanceOrder;
+    var twoAssets, bal, pair_1, exchangeInfo, json, tr, filter, roundBy, balString_1, binanceOrder, priceUsd, _a, balUsd_1, pair_2, exchangeInfo, json, tr, filter, roundBy, balString_2, binanceOrder;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -55,13 +57,29 @@ var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void
                 return [4 /*yield*/, (0, binance_1.getBalanceBinance)(twoAssets[0])];
             case 1:
                 bal = _b.sent();
-                if (!(twoAssets[0] === masterUSD)) return [3 /*break*/, 4];
+                if (!(twoAssets[0] === masterUSD)) return [3 /*break*/, 6];
                 if (bal < 1) {
                     console.error("".concat(masterUSD, " balance is too small: ").concat(bal, ", cannot swap"));
                     process.exit(1);
                 }
+                pair_1 = "".concat(twoAssets[1]).concat(twoAssets[0]);
+                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/exchangeInfo", {
+                        method: 'GET',
+                        headers: {
+                            'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
+                        },
+                    })];
+            case 2:
+                exchangeInfo = _b.sent();
+                return [4 /*yield*/, exchangeInfo.body.json()];
+            case 3:
+                json = _b.sent();
+                tr = json.symbols.find(function (s) { return s.symbol === pair_1; });
+                filter = tr.filters.find(function (f) { return f.filterType === 'LOT_SIZE'; });
+                roundBy = Math.round(1 / parseFloat(filter.stepSize));
+                balString_1 = (Math.floor(bal * roundBy) / roundBy).toString();
                 return [4 /*yield*/, new Promise(function (resolve, reject) {
-                        readline.question("Swap 100% of ".concat(bal, " ").concat(masterUSD, " to ").concat(twoAssets[1], " ? yes/y no/n :\n"), function (resp) {
+                        readline.question("Swap 100% of ".concat(balString_1, " ").concat(masterUSD, " to ").concat(twoAssets[1], " ? yes/y no/n :\n"), function (resp) {
                             if (['yes', 'y'].includes(resp)) {
                                 resolve(true);
                             }
@@ -71,26 +89,42 @@ var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void
                             readline.close();
                         });
                     })];
-            case 2:
+            case 4:
                 _b.sent();
-                return [4 /*yield*/, (0, binance_1.placeOrderMarket)("".concat(twoAssets[1]).concat(twoAssets[0]), bal, 'buy')];
-            case 3:
+                return [4 /*yield*/, (0, binance_1.placeOrderMarket)("".concat(twoAssets[1]).concat(twoAssets[0]), balString_1, 'buy')];
+            case 5:
                 binanceOrder = _b.sent();
                 console.log(binanceOrder);
                 process.exit(0);
-                return [3 /*break*/, 8];
-            case 4:
+                return [3 /*break*/, 12];
+            case 6:
                 _a = parseFloat;
                 return [4 /*yield*/, (0, binance_1.getPriceTicker)("".concat(twoAssets[0]).concat(masterUSD))];
-            case 5:
+            case 7:
                 priceUsd = _a.apply(void 0, [(_b.sent()).price]);
                 balUsd_1 = priceUsd * bal;
+                pair_2 = "".concat(twoAssets[0]).concat(twoAssets[1]);
+                return [4 /*yield*/, (0, undici_1.request)("https://api1.binance.com/api/v3/exchangeInfo", {
+                        method: 'GET',
+                        headers: {
+                            'X-MBX-APIKEY': (0, utils_1.getApiKey)(),
+                        },
+                    })];
+            case 8:
+                exchangeInfo = _b.sent();
+                return [4 /*yield*/, exchangeInfo.body.json()];
+            case 9:
+                json = _b.sent();
+                tr = json.symbols.find(function (s) { return s.symbol === pair_2; });
+                filter = tr.filters.find(function (f) { return f.filterType === 'LOT_SIZE'; });
+                roundBy = Math.round(1 / parseFloat(filter.stepSize));
+                balString_2 = (Math.floor(bal * roundBy) / roundBy).toString();
                 if (balUsd_1 < 1) {
-                    console.error("".concat(twoAssets[0], " balance is too small: ").concat(bal, " (approx ").concat(balUsd_1, " ").concat(masterUSD, ")"));
+                    console.error("".concat(twoAssets[0], " balance is too small: ").concat(balString_2, " (approx ").concat(balUsd_1, " ").concat(masterUSD, ")"));
                     process.exit(1);
                 }
                 return [4 /*yield*/, new Promise(function (resolve, reject) {
-                        readline.question("Swap 100% of ".concat(bal, " ").concat(twoAssets[0], " (approx ").concat(balUsd_1, " ").concat(masterUSD, ") tp ").concat(masterUSD, " ? yes/y no/n :\n"), function (resp) {
+                        readline.question("Swap 100% of ".concat(balString_2, " ").concat(twoAssets[0], " (approx ").concat(balUsd_1, " ").concat(masterUSD, ") to ").concat(masterUSD, " ? yes/y no/n :\n"), function (resp) {
                             if (['yes', 'y'].includes(resp)) {
                                 resolve(true);
                             }
@@ -100,15 +134,16 @@ var swap = function (masterUSD, swapArg) { return __awaiter(void 0, void 0, void
                             readline.close();
                         });
                     })];
-            case 6:
+            case 10:
                 _b.sent();
-                return [4 /*yield*/, (0, binance_1.placeOrderMarket)("".concat(twoAssets[1]).concat(twoAssets[0]), bal, 'sell')];
-            case 7:
+                console.log("".concat(twoAssets[0]).concat(twoAssets[1]), bal, balString_2);
+                return [4 /*yield*/, (0, binance_1.placeOrderMarket)("".concat(twoAssets[0]).concat(twoAssets[1]), balString_2, 'sell')];
+            case 11:
                 binanceOrder = _b.sent();
                 console.log(binanceOrder);
                 process.exit(0);
-                _b.label = 8;
-            case 8: return [2 /*return*/];
+                _b.label = 12;
+            case 12: return [2 /*return*/];
         }
     });
 }); };

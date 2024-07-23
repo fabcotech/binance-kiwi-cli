@@ -86,7 +86,7 @@ var swapAllUsd = function (masterUSD) { return __awaiter(void 0, void 0, void 0,
                 if (!(_c < pairs_1.length)) return [3 /*break*/, 11];
                 pair = pairs_1[_c];
                 console.log("will swap all ".concat(pair.symbol.replace(masterUSD, ''), " (approx ").concat((0, utils_1.round2)(pair.balanceUsd), " ").concat(masterUSD, ") to ").concat(masterUSD));
-                return [4 /*yield*/, (0, binance_1.placeOrderMarket)(pair.symbol, pair.balance, 'sell')];
+                return [4 /*yield*/, (0, binance_1.placeOrderMarket)(pair.symbol, pair.balance.toString(), 'sell')];
             case 9:
                 binanceOrder = _d.sent();
                 _d.label = 10;
