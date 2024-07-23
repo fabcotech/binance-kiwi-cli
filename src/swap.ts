@@ -55,7 +55,7 @@ export const swap = async (masterUSD: string, swapArg: string) => {
     }
     await new Promise((resolve, reject) => {
       readline.question(
-        `Swap 100% of ${bal} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) tp ${masterUSD} ? yes/y no/n :\n`,
+        `Swap 100% of ${bal} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) to ${masterUSD} ? yes/y no/n :\n`,
         (resp: string) => {
           if (['yes', 'y'].includes(resp)) {
             resolve(true);
@@ -66,6 +66,7 @@ export const swap = async (masterUSD: string, swapArg: string) => {
         }
       );
     });
+    console.log(`${twoAssets[1]}${twoAssets[0]}`);
     const binanceOrder = await placeOrderMarket(
       `${twoAssets[1]}${twoAssets[0]}`,
       bal,

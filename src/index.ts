@@ -24,11 +24,12 @@ const f = () => {
     cancelOpenOrders();
   } else if (getSingleProcessArgv('--swap-all-usd')) {
     swapAllUsd(masterUSD);
-  } else if (getSingleProcessArgv('--swap')) {
-    swap(masterUSD, getProcessArgv('--swap') || '');
+  } else if (getSingleProcessArgv('--swap') || getSingleProcessArgv('-s')) {
+    swap(masterUSD, getProcessArgv('--swap') || getProcessArgv('-s') || '');
   } else {
     console.error('Unrecognized command');
     process.exit(1);
   }
 };
+
 f();
