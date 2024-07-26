@@ -1,6 +1,3 @@
-import querystring from 'node:querystring';
-import { request } from 'undici';
-
 import { round2 } from './utils';
 import {
   getBalancesBinance,
@@ -9,7 +6,6 @@ import {
 } from './binance';
 
 export const swapAllUsd = async (masterUSD: string) => {
-  const s = '';
   const balances = await getBalancesBinance();
   const pairs = [];
   for (const bal of balances.balances) {
