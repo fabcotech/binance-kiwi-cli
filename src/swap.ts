@@ -16,7 +16,7 @@ const readline = createInterface({
   output: process.stdout,
 });
 
-const parseAmountArg = (str: string): any => {
+const parseAmountArg = (str: string): Amount => {
   if (str.includes('%')) {
     const f = parseFloat(str.replace('%', ''));
     if (isNan(f) || f <= 0 || f > 100) {
@@ -36,7 +36,7 @@ export const swap = async (
   swapArg: string,
   amountArg: string
 ) => {
-  let amount: any = { type: 'percent', amount: 100 };
+  let amount: Amount = { type: 'percent', amount: 100 };
   if (amountArg) {
     amount = parseAmountArg(amountArg);
   }
