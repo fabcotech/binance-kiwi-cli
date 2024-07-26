@@ -25,7 +25,11 @@ const f = () => {
   } else if (getSingleProcessArgv('--swap-all-usd')) {
     swapAllUsd(masterUSD);
   } else if (getSingleProcessArgv('--swap') || getSingleProcessArgv('-s')) {
-    swap(masterUSD, getProcessArgv('--swap') || getProcessArgv('-s') || '');
+    swap(
+      masterUSD,
+      getProcessArgv('--swap') || getProcessArgv('-s') || '',
+      getProcessArgv('--amount') || getProcessArgv('-a') || ''
+    );
   } else {
     console.error('Unrecognized command');
     process.exit(1);

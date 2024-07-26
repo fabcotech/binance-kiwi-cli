@@ -6,12 +6,40 @@ import { createInterface } from 'readline';
 import { getApiKey } from './utils';
 import { getBalanceBinance, getPriceTicker, placeOrderMarket } from './binance';
 
+interface Amount {
+  type: 'percent' | 'absolute';
+  amount: number;
+}
+
 const readline = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-export const swap = async (masterUSD: string, swapArg: string) => {
+const parseAmountArg = (str: string): any => {
+  if (str.includes('%')) {
+    const f = parseFloat(str.replace('%', ''));
+    if (isNan(f) || f <= 0 || f > 100) {
+      throw new Error('Invalid --amount percentage');
+    }
+    return { type: 'percent', amount: f };
+  }
+  const f = parseFloat(str);
+  if (isNan(f) || f <= 0 || f > 100) {
+    throw new Error('Invalid --amount percentage');
+  }
+  return { type: 'absolute', amount: f };
+};
+
+export const swap = async (
+  masterUSD: string,
+  swapArg: string,
+  amountArg: string
+) => {
+  let amount: any = { type: 'percent', amount: 100 };
+  if (amountArg) {
+    amount = parseAmountArg(amountArg);
+  }
   const twoAssets = swapArg.split('->').map((a) => (a || '').toUpperCase());
   if (!twoAssets.includes(masterUSD))
     throw new Error(`${swapArg} does not include ${masterUSD}, cannot swap`);

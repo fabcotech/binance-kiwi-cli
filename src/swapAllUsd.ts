@@ -9,7 +9,7 @@ import {
 } from './binance';
 
 export const swapAllUsd = async (masterUSD: string) => {
-  let s = '';
+  const s = '';
   const balances = await getBalancesBinance();
   const pairs = [];
   for (const bal of balances.balances) {
