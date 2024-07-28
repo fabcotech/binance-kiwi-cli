@@ -19,13 +19,13 @@ const readline = createInterface({
 const parseAmountArg = (str: string): Amount => {
   if (str.includes('%')) {
     const f = parseFloat(str.replace('%', ''));
-    if (isNan(f) || f <= 0 || f > 100) {
+    if (isNaN(f) || f <= 0 || f > 100) {
       throw new Error('Invalid --amount percentage');
     }
     return { type: 'percent', amount: f };
   }
   const f = parseFloat(str);
-  if (isNan(f) || f <= 0 || f > 100) {
+  if (isNaN(f) || f <= 0 || f > 100) {
     throw new Error('Invalid --amount percentage');
   }
   return { type: 'absolute', amount: f };
