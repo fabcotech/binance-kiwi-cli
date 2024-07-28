@@ -46,7 +46,6 @@ export const swap = async (
   const twoAssets = swapArg.split('->').map((a) => (a || '').toUpperCase());
   if (!twoAssets.includes(masterUSD))
     throw new Error(`${swapArg} does not include ${masterUSD}, cannot swap`);
-  console.log(twoAssets);
   const bal = await getBalanceBinance(twoAssets[0]);
   if (twoAssets[0] === masterUSD) {
     if (bal < 1) {
