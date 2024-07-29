@@ -44,7 +44,20 @@ export const swap = async (
   const twoAssets = swapArg.split('->').map((a) => (a || '').toUpperCase());
   if (!twoAssets.includes(masterUSD))
     throw new Error(`${swapArg} does not include ${masterUSD}, cannot swap`);
-  const bal = await getBalanceBinance(twoAssets[0]);
+  const availableBalance = await getBalanceBinance(twoAssets[0]);
+  let bal = availableBalance;
+  if (amount.type === 'percent') {
+    bal = (amount.amount / 100) * bal;
+    console.log(
+      `${amount.amount}% of ${twoAssets[0]} total available balance ${availableBalance} is ${bal}`
+    );
+  } else if (amount.type === 'absolute') {
+    bal = amount.amount;
+    console.log(
+      `${amount.amount}% of ${twoAssets[0]} total available balance ${availableBalance} is ${bal}`
+    );
+  }
+  process.exit(0);
   if (twoAssets[0] === masterUSD) {
     if (bal < 1) {
       console.error(`${masterUSD} balance is too small: ${bal}, cannot swap`);
