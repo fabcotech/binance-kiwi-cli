@@ -56,10 +56,10 @@ node kiwi --swap "USDC->ETH"
 # swap 100% of available DOGE to USDC
 node kiwi -s "DOGE->USDC"
 
-# swap 20 USDC to ETH
-node kiwi --swap "USDC->ETH" --amount 20
-# swap 20% of available USDC to ETH
-node kiwi --swap "USDC->ETH" --amount "20%"
+# swap 20 USDC to ETH, skip security question
+node kiwi --swap "USDC->ETH" --amount 20 -y
+# swap 20% of available USDC to ETH, skip security question
+node kiwi --swap "USDC->ETH" --amount "20%" --yes
 
 ```
 
