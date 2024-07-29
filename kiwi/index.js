@@ -24,7 +24,7 @@ var f = function () {
         (0, swapAllUsd_1.swapAllUsd)(masterUSD);
     }
     else if ((0, utils_1.getSingleProcessArgv)('--swap') || (0, utils_1.getSingleProcessArgv)('-s')) {
-        (0, swap_1.swap)(masterUSD, (0, utils_1.getProcessArgv)('--swap') || (0, utils_1.getProcessArgv)('-s') || '');
+        (0, swap_1.swap)(masterUSD, (0, utils_1.getProcessArgv)('--swap') || (0, utils_1.getProcessArgv)('-s') || '', (0, utils_1.getProcessArgv)('--amount') || (0, utils_1.getProcessArgv)('-a') || '');
     }
     else {
         console.error('Unrecognized command');

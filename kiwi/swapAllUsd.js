@@ -40,12 +40,10 @@ exports.swapAllUsd = void 0;
 var utils_1 = require("./utils");
 var binance_1 = require("./binance");
 var swapAllUsd = function (masterUSD) { return __awaiter(void 0, void 0, void 0, function () {
-    var s, balances, pairs, _i, _a, bal, priceUsd, pair, _b, err_1, _c, pairs_1, pair, binanceOrder;
+    var balances, pairs, _i, _a, bal, priceUsd, pair, _b, err_1, _c, pairs_1, pair, binanceOrder;
     return __generator(this, function (_d) {
         switch (_d.label) {
-            case 0:
-                s = '';
-                return [4 /*yield*/, (0, binance_1.getBalancesBinance)()];
+            case 0: return [4 /*yield*/, (0, binance_1.getBalancesBinance)()];
             case 1:
                 balances = _d.sent();
                 pairs = [];
