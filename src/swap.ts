@@ -3,7 +3,7 @@ import { request } from 'undici';
 import { stdin, stdout } from 'process';
 import { createInterface } from 'readline';
 
-import { getApiKey } from './utils';
+import { getApiKey, getSingleProcessArgv } from './utils';
 import { getBalanceBinance, getPriceTicker, placeOrderMarket } from './binance';
 
 interface Amount {
@@ -49,15 +49,20 @@ export const swap = async (
   if (amount.type === 'percent') {
     bal = (amount.amount / 100) * bal;
     console.log(
-      `${amount.amount}% of ${twoAssets[0]} total available balance ${availableBalance} is ${bal}`
+      `Will try to swap ${bal} (${amount.amount}%) of ${twoAssets[0]} total available balance ${availableBalance}`
     );
   } else if (amount.type === 'absolute') {
+    if (amount.amount > availableBalance) {
+      console.error(
+        `${amount.amount} ${twoAssets[0]} is above to available balance ${availableBalance}, cannot swap`
+      );
+      process.exit(1);
+    }
     bal = amount.amount;
     console.log(
-      `${amount.amount}% of ${twoAssets[0]} total available balance ${availableBalance} is ${bal}`
+      `Will try to swap ${amount.amount} ${twoAssets[0]}, total available balance is ${availableBalance}`
     );
   }
-  process.exit(0);
   if (twoAssets[0] === masterUSD) {
     if (bal < 1) {
       console.error(`${masterUSD} balance is too small: ${bal}, cannot swap`);
@@ -78,19 +83,22 @@ export const swap = async (
     const filter = tr.filters.find((f: any) => f.filterType === 'LOT_SIZE');
     const roundBy = Math.round(1 / parseFloat(filter.stepSize));
     const balString = (Math.floor(bal * roundBy) / roundBy).toString();
-    await new Promise((resolve, reject) => {
-      readline.question(
-        `Swap 100% of ${balString} ${masterUSD} to ${twoAssets[1]} ? yes/y no/n :\n`,
-        (resp: string) => {
-          if (['yes', 'y'].includes(resp)) {
-            resolve(true);
-          } else {
-            reject();
+    if (!getSingleProcessArgv('--yes') && !getSingleProcessArgv('-y')) {
+      await new Promise((resolve, reject) => {
+        readline.question(
+          `Swap ${balString} ${masterUSD} to ${twoAssets[1]} ? yes/y no/n :\n`,
+          (resp: string) => {
+            if (['yes', 'y'].includes(resp)) {
+              resolve(true);
+            } else {
+              console.error('Answered no, abort swap');
+              process.exit(1);
+            }
+            readline.close();
           }
-          readline.close();
-        }
-      );
-    });
+        );
+      });
+    }
     const binanceOrder = await placeOrderMarket(
       `${twoAssets[1]}${twoAssets[0]}`,
       balString,
@@ -125,19 +133,22 @@ export const swap = async (
       );
       process.exit(1);
     }
-    await new Promise((resolve, reject) => {
-      readline.question(
-        `Swap 100% of ${balString} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) to ${masterUSD} ? yes/y no/n :\n`,
-        (resp: string) => {
-          if (['yes', 'y'].includes(resp)) {
-            resolve(true);
-          } else {
-            reject();
+    if (!getSingleProcessArgv('--yes') && !getSingleProcessArgv('-y')) {
+      await new Promise((resolve, reject) => {
+        readline.question(
+          `Swap ${balString} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) to ${masterUSD} ? yes/y no/n :\n`,
+          (resp: string) => {
+            if (['yes', 'y'].includes(resp)) {
+              resolve(true);
+            } else {
+              console.error('Answered no, abort swap');
+              process.exit(1);
+            }
+            readline.close();
           }
-          readline.close();
-        }
-      );
-    });
+        );
+      });
+    }
     console.log(`${twoAssets[0]}${twoAssets[1]}`, bal, balString);
     const binanceOrder = await placeOrderMarket(
       `${twoAssets[0]}${twoAssets[1]}`,
