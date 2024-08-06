@@ -59,3 +59,18 @@ export const round3 = (a: number) => {
 export const round4 = (a: number) => {
   return Math.round(10000 * a) / 10000;
 };
+
+export const parseAmountArg = (str: string): Amount => {
+  if (str.includes('%')) {
+    const f = parseFloat(str.replace('%', ''));
+    if (isNaN(f) || f <= 0 || f > 100) {
+      throw new Error('Invalid --amount percentage');
+    }
+    return { type: 'percent', amount: f };
+  }
+  const f = parseFloat(str);
+  if (isNaN(f) || f <= 0 || f > 100) {
+    throw new Error('Invalid --amount percentage');
+  }
+  return { type: 'absolute', amount: f };
+};
