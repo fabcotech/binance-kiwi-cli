@@ -3,7 +3,7 @@ import { request } from 'undici';
 import { stdin, stdout } from 'process';
 import { createInterface } from 'readline';
 
-import { getApiKey, getSingleProcessArgv } from './utils';
+import { getApiKey, getSingleProcessArgv, parseAmountArg } from './utils';
 import { getBalanceBinance, getPriceTicker, placeOrderMarket } from './binance';
 
 interface Amount {
@@ -15,21 +15,6 @@ const readline = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
-const parseAmountArg = (str: string): Amount => {
-  if (str.includes('%')) {
-    const f = parseFloat(str.replace('%', ''));
-    if (isNaN(f) || f <= 0 || f > 100) {
-      throw new Error('Invalid --amount percentage');
-    }
-    return { type: 'percent', amount: f };
-  }
-  const f = parseFloat(str);
-  if (isNaN(f) || f <= 0 || f > 100) {
-    throw new Error('Invalid --amount percentage');
-  }
-  return { type: 'absolute', amount: f };
-};
 
 export const swap = async (
   masterUSD: string,
