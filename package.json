@@ -9,7 +9,8 @@
     "prettier:format": "prettier --write \"{src,tests,wrappers}/**/*.ts\"",
     "prettier:check": "prettier --check \"{src,tests,wrappers}/**/*.ts\"",
     "lint": "eslint \"{src,tests,wrappers}/**/*.ts\" --fix",
-    "build": "rm -rf kiwi/ && tsc -b ./tsconfig.build.json"
+    "build": "rm -rf kiwi/ && tsc -b ./tsconfig.build.json",
+    "test": "jest"
   },
   "files": [
     "kiwi/"
