@@ -6,11 +6,6 @@ import { createInterface } from 'readline';
 import { getApiKey, getSingleProcessArgv, parseAmountArg } from './utils';
 import { getBalanceBinance, getPriceTicker, placeOrderMarket } from './binance';
 
-interface Amount {
-  type: 'percent' | 'absolute';
-  amount: number;
-}
-
 const readline = createInterface({
   input: process.stdin,
   output: process.stdout,
