@@ -66,17 +66,16 @@ export const round4 = (a: number) => {
 };
 
 export const parseAmountArg = (str: string): Amount => {
-  console.log(str, str.replace('%', ''));
   if (str.includes('%')) {
-    const f = parseFloat(str.replace('%', '').replace(',', '.'));
-    if (isNaN(f) || f <= 0 || f > 10000) {
+    const float = parseFloat(str.replace('%', '').replace(',', '.'));
+    if (isNaN(float)) {
       throw new Error('Invalid --amount percentage');
     }
-    return { type: 'percent', amount: f };
+    return { type: 'percent', amount: float };
   }
-  const f = parseFloat(str);
-  if (isNaN(f) || f <= 0 || f > 100) {
+  const float = parseFloat(str.replace('%', '').replace(',', '.'));
+  if (isNaN(float)) {
     throw new Error('Invalid --amount absolute');
   }
-  return { type: 'absolute', amount: f };
+  return { type: 'absolute', amount: float };
 };
