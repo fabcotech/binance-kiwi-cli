@@ -1,3 +1,8 @@
+interface Amount {
+  type: 'percent' | 'absolute';
+  amount: number;
+}
+
 export const getSingleProcessArgv = (param: string) => {
   const index = process.argv.findIndex((arg) => arg === param);
   if (index === -1) {
@@ -61,16 +66,17 @@ export const round4 = (a: number) => {
 };
 
 export const parseAmountArg = (str: string): Amount => {
+  console.log(str, str.replace('%', ''));
   if (str.includes('%')) {
-    const f = parseFloat(str.replace('%', ''));
-    if (isNaN(f) || f <= 0 || f > 100) {
+    const f = parseFloat(str.replace('%', '').replace(',', '.'));
+    if (isNaN(f) || f <= 0 || f > 10000) {
       throw new Error('Invalid --amount percentage');
     }
     return { type: 'percent', amount: f };
   }
   const f = parseFloat(str);
   if (isNaN(f) || f <= 0 || f > 100) {
-    throw new Error('Invalid --amount percentage');
+    throw new Error('Invalid --amount absolute');
   }
   return { type: 'absolute', amount: f };
 };
