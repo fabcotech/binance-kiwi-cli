@@ -1,7 +1,4 @@
-interface Amount {
-  type: 'percent' | 'absolute';
-  amount: number;
-}
+import { Amount } from './models';
 
 export const getSingleProcessArgv = (param: string) => {
   const index = process.argv.findIndex((arg) => arg === param);

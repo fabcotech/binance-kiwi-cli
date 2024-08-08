@@ -1,7 +1,8 @@
 import { request } from 'undici';
 import { createInterface } from 'readline';
 
-import { getApiKey, getSingleProcessArgv, parseAmountArg } from './utils';
+import { Amount } from './models';
+import { getApiKey, getSingleProcessArgv } from './utils';
 import { getBalanceBinance, getPriceTicker, placeOrderMarket } from './binance';
 
 const readline = createInterface({
