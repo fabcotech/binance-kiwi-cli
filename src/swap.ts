@@ -1,6 +1,4 @@
-import querystring from 'node:querystring';
 import { request } from 'undici';
-import { stdin, stdout } from 'process';
 import { createInterface } from 'readline';
 
 import { getApiKey, getSingleProcessArgv, parseAmountArg } from './utils';
@@ -64,7 +62,7 @@ export const swap = async (
     const roundBy = Math.round(1 / parseFloat(filter.stepSize));
     const balString = (Math.floor(bal * roundBy) / roundBy).toString();
     if (!getSingleProcessArgv('--yes') && !getSingleProcessArgv('-y')) {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve) => {
         readline.question(
           `Swap ${balString} ${masterUSD} to ${twoAssets[1]} ? yes/y no/n :\n`,
           (resp: string) => {
@@ -114,7 +112,7 @@ export const swap = async (
       process.exit(1);
     }
     if (!getSingleProcessArgv('--yes') && !getSingleProcessArgv('-y')) {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve) => {
         readline.question(
           `Swap ${balString} ${twoAssets[0]} (approx ${balUsd} ${masterUSD}) to ${masterUSD} ? yes/y no/n :\n`,
           (resp: string) => {

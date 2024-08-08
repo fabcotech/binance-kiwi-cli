@@ -10,7 +10,6 @@ test('[parseAmountArg] test parsing of percentages', async () => {
     type: 'percent',
     amount: 110.41,
   });
-  let error1: null | string = null;
   expect(() => parseAmountArg('a%')).toThrow(
     new Error('Invalid --amount percentage')
   );
@@ -26,7 +25,6 @@ test('[parseAmountArg] test parsing of absolute', async () => {
     type: 'absolute',
     amount: 110.41,
   });
-  let error1: null | string = null;
   expect(() => parseAmountArg('x')).toThrow(
     new Error('Invalid --amount absolute')
   );
